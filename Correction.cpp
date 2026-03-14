@@ -2,21 +2,24 @@
 #include <iostream>
 
 int main() {
-    // 1. Create a blank black image (400x200 pixels)
-    cv::Mat image = cv::Mat::zeros(200, 400, CV_8UC3);
+    
+    cv::VideoCapture cap(0);
 
-    // 2. Add some text to the image
-    std::string text = "OpenCV " + std::string(CV_VERSION) + " works!";
-    cv::putText(image, text, cv::Point(50, 100),
-        cv::FONT_HERSHEY_SIMPLEX, 0.8, cv::Scalar(0, 255, 0), 2);
+    cv::Mat frame;
 
-    // 3. Show the image in a window
-    cv::imshow("OpenCV Test", image);
+    while (true) {
+        cap >> frame;
+        if (frame.empty()) {
+            std::cerr << "Failed to capture frame" << std::endl;
+            break;
+        }
+        cv::imshow("Camera", frame);
+        if (cv::waitKey(30) >= 0) {
+            break;
+		}
+    }
 
-    std::cout << "Successfully loaded OpenCV version: " << CV_VERSION << std::endl;
-    std::cout << "Press any key to close the window..." << std::endl;
 
-    // 4. Wait for a key press to close
     cv::waitKey(0);
     return 0;
 }
