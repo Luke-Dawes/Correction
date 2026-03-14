@@ -11,8 +11,21 @@ endif()
 
 project ("Correction")
 
+# 1. Point to the build folder inside your extracted OpenCV
+set(OpenCV_DIR "C:/c++ libarys/opencv/build")
+
+# 2. Tell CMake to find the OpenCV package
+find_package(OpenCV REQUIRED)
+
+# 3. Add your source file (replace main.cpp with your filename)
+# add_executable(MyProject Correction.cpp)
+
 # Add source to this project's executable.
 add_executable (Correction "Correction.cpp" "Correction.h")
+
+target_include_directories(Correction PRIVATE ${OpenCV_INCLUDE_DIRS})
+target_link_libraries(Correction PRIVATE ${OpenCV_LIBS})
+
 
 if (CMAKE_VERSION VERSION_GREATER 3.12)
   set_property(TARGET Correction PROPERTY CXX_STANDARD 20)
