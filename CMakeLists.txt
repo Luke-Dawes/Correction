@@ -1,7 +1,4 @@
-﻿# CMakeList.txt : CMake project for Correction, include source and define
-# project specific logic here.
-#
-cmake_minimum_required (VERSION 3.8)
+﻿cmake_minimum_required (VERSION 3.8)
 
 # Enable Hot Reload for MSVC compilers if supported.
 if (POLICY CMP0141)
@@ -11,24 +8,27 @@ endif()
 
 project ("Correction")
 
-# 1. Point to the build folder inside your extracted OpenCV
+# 1. OpenCV setup
 set(OpenCV_DIR "C:/c++ libarys/opencv/build")
-
-# 2. Tell CMake to find the OpenCV package
 find_package(OpenCV REQUIRED)
 
-# 3. Add your source file (replace main.cpp with your filename)
-# add_executable(MyProject Correction.cpp)
+# 2. OpenVINO setup
+set(OPENVINO_ROOT "C:/c++ libarys/openvino/runtime")
+include_directories("${OPENVINO_ROOT}/include")
+link_directories("${OPENVINO_ROOT}/lib/intel64/Release")
 
-# Add source to this project's executable.
-add_executable (Correction "Correction.cpp" "Correction.h")
+# 3. Add source to this project's executable
+add_executable(Correction "Correction.cpp" "Correction.h")
 
+# 4. Link OpenCV libraries
 target_include_directories(Correction PRIVATE ${OpenCV_INCLUDE_DIRS})
 target_link_libraries(Correction PRIVATE ${OpenCV_LIBS})
 
+# 5. Link OpenVINO libraries
+# Adjust plugin libraries if needed (CPU, GPU, MYRIAD, etc.)
+target_link_libraries(Correction PRIVATE openvino)
 
+# 6. Set C++ standard
 if (CMAKE_VERSION VERSION_GREATER 3.12)
   set_property(TARGET Correction PROPERTY CXX_STANDARD 20)
 endif()
-
-# TODO: Add tests and install targets if needed.
